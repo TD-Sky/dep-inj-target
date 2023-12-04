@@ -1,9 +1,13 @@
-use proc_macro::TokenStream;
+use proc_macro2::TokenStream;
 use quote::quote;
-use syn::{parse_macro_input, parse_quote, Fields, ItemImpl, ItemStruct};
+use syn::{parse_macro_input, parse_quote};
+use syn::{Fields, ItemStruct};
 
 #[proc_macro_attribute]
-pub fn dep_inj_target(_attr: TokenStream, item: TokenStream) -> TokenStream {
+pub fn dep_inj_target(
+    _attr: proc_macro::TokenStream,
+    item: proc_macro::TokenStream,
+) -> proc_macro::TokenStream {
     let item = parse_macro_input!(item as ItemStruct);
 
     if let Err(e) = check_target(&item) {
@@ -50,9 +54,9 @@ fn target_struct(item: &ItemStruct) -> ItemStruct {
     }
 }
 
-fn target_impl_ref_casting(item: &ItemStruct) -> ItemImpl {
+fn target_impl_ref_casting(item: &ItemStruct) -> TokenStream {
     let ident = &item.ident;
-    parse_quote! {
+    quote! {
         impl<__Deps__: ?Sized> #ident<__Deps__> {
             #[inline]
             pub fn inj_ref(deps: &__Deps__) -> &Self {
@@ -197,9 +201,9 @@ fn target_impl_ref_casting(item: &ItemStruct) -> ItemImpl {
     }
 }
 
-fn target_impl_new(item: &ItemStruct) -> ItemImpl {
+fn target_impl_new(item: &ItemStruct) -> TokenStream {
     let ident = &item.ident;
-    parse_quote! {
+    quote! {
         impl<__Deps__> #ident<__Deps__> {
             #[inline]
             pub fn inj(deps: __Deps__) -> Self {
