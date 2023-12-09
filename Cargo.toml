@@ -2,6 +2,14 @@
 name = "dep-inj-target"
 version = "0.1.0"
 edition = "2021"
+authors = ["Collide <three-dim-sky@foxmail.com>"]
+description = "Stateless target creator of dep-inj"
+documentation = "https://github.com/TD-Sky/dep-inj-target"
+repository = "https://github.com/TD-Sky/dep-inj-target"
+readme = "README.md"
+keywords = ["dependency-injection", "macro"]
+license = "MIT"
+include = ["src/**/*", "Cargo.toml", "LICENSE*", "README.md"]
 
 [lib]
 proc-macro = true
